@@ -9,7 +9,10 @@ namespace CarRentalSystem.Interfaces
 {
     public interface ISearchable
     {
-        Car SearchById(int id);
+        Car GetCarById(int id);
         List<Car> SearchByModel(string model);
+        List<Car> SearchByStatus(string status);
+        //Car SearchById(int id);
+        //List<Car> SearchByModel(string model);
     }
 }
