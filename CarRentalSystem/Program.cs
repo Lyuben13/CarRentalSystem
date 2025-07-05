@@ -501,6 +501,8 @@ Available commands:
             Console.WriteLine($"Total Cars: {allCars.Count()}");
             Console.WriteLine($"Available Cars: {availableCars.Count()}");
             Console.WriteLine($"Rented Cars: {rentedCars.Count()}");
+            Console.WriteLine($"Removed Cars: {allCars.Count(c => c.Status == CarStatus.Removed)}");
+            Console.WriteLine($"Maintenance Cars: {allCars.Count(c => c.Status == CarStatus.Maintenance)}");
             Console.WriteLine($"Overdue Rentals: {overdueRentals.Count()}");
             
             Console.WriteLine("\nCars by Type:");
