@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using CarRentalSystem.Models;
 
@@ -31,11 +32,11 @@ namespace CarRentalSystem.Services
             foreach (var rental in rentals)
             {
                 var actualReturn = rental.ActualReturn?.ToString("yyyy-MM-dd") ?? "";
-                var totalCost = rental.TotalCost?.ToString("F2") ?? "";
+                var totalCost = rental.TotalCost?.ToString("F2", CultureInfo.InvariantCulture) ?? "";
                 
                 lines.Add($"{rental.Id},{rental.CarId},{rental.CustomerName}," +
                          $"{rental.StartDate:yyyy-MM-dd},{rental.ExpectedReturn:yyyy-MM-dd}," +
-                         $"{actualReturn},{rental.DailyRate:F2},{totalCost},{rental.Status}");
+                         $"{actualReturn},{rental.DailyRate.ToString("F2", CultureInfo.InvariantCulture)},{totalCost},{rental.Status}");
             }
             
             File.WriteAllLines(filePath, lines);
