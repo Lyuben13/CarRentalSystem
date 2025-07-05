@@ -7,11 +7,34 @@ namespace CarRentalSystem.Models
     /// </summary>
     public class Car : AbstractVehicle, IRentable
     {
-        public string Status { get; set; } = "Available";
+        /// <summary>
+        /// Gets or sets the current status of the car (Available, Rented, Removed, Maintenance)
+        /// </summary>
+        public CarStatus Status { get; set; } = CarStatus.Available;
+
+        /// <summary>
+        /// Gets or sets the name of the person currently renting the car
+        /// </summary>
         public string CurrentRenter { get; set; } = "";
+
+        /// <summary>
+        /// Gets or sets the daily rental rate for this car in currency units
+        /// </summary>
         public decimal DailyRate { get; set; } = 35.0m;
+
+        /// <summary>
+        /// Gets or sets the license plate number of the car
+        /// </summary>
         public string LicensePlate { get; set; } = "";
+
+        /// <summary>
+        /// Gets or sets the current mileage of the car in kilometers
+        /// </summary>
         public int Mileage { get; set; } = 0;
+
+        /// <summary>
+        /// Gets or sets the date when the car last underwent maintenance
+        /// </summary>
         public DateTime LastMaintenance { get; set; } = DateTime.Now;
 
         /// <summary>
@@ -20,9 +43,9 @@ namespace CarRentalSystem.Models
         /// <param name="renter">Name of the renter</param>
         public void Rent(string renter)
         {
-            if (Status == "Available")
+            if (Status == CarStatus.Available)
             {
-                Status = "Rented";
+                Status = CarStatus.Rented;
                 CurrentRenter = renter;
             }
         }
@@ -32,7 +55,7 @@ namespace CarRentalSystem.Models
         /// </summary>
         public void Return()
         {
-            Status = "Available";
+            Status = CarStatus.Available;
             CurrentRenter = "";
         }
 
@@ -73,7 +96,11 @@ namespace CarRentalSystem.Models
         /// <returns>Formatted display string</returns>
         public string GetDisplayInfo()
         {
-            return $"ID: {Id} | {Make} {Model} ({Year}) | {Type} | Status: {Status} | Rate: ${DailyRate:F2}/day";
+            var renterInfo = Status == CarStatus.Rented && !string.IsNullOrEmpty(CurrentRenter) 
+                ? $" | Rented by: {CurrentRenter}" 
+                : "";
+            
+            return $"ID: {Id} | {Make} {Model} ({Year}) | {Type} | Status: {Status} | Rate: ${DailyRate:F2}/day{renterInfo}";
         }
     }
 }

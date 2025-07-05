@@ -20,13 +20,16 @@ namespace CarRentalSystem
                 var carWriter = new CarFileWriter(carsPath);
                 var rentalReader = new RentalFileReader(rentalsPath);
                 var rentalWriter = new RentalFileWriter(rentalsPath);
+                var customerReader = new CustomerFileReader(customersPath);
+                var customerWriter = new CustomerFileWriter(customersPath);
 
                 var cars = carReader.LoadCars();
                 var rentals = rentalReader.LoadRentals();
-                var service = new CarRentalService(cars, rentals);
+                var customers = customerReader.LoadCustomers();
+                var service = new CarRentalService(cars, rentals, customers);
 
                 Console.WriteLine("=== Welcome to Car Rental System ===");
-                Console.WriteLine($"Loaded {cars.Count} cars and {rentals.Count} rentals.");
+                Console.WriteLine($"Loaded {cars.Count} cars, {rentals.Count} rentals, and {customers.Count} customers.");
                 ShowHelp();
 
                 bool isRunning = true;
@@ -42,7 +45,7 @@ namespace CarRentalSystem
                         var cmd = parts[0].ToLower();
                         var arg = parts.Length > 1 ? parts[1] : string.Empty;
 
-                        isRunning = ExecuteCommand(service, carWriter, rentalWriter, cmd, arg);
+                        isRunning = ExecuteCommand(service, carWriter, rentalWriter, customerWriter, cmd, arg);
                     }
                     catch (Exception ex)
                     {
@@ -60,7 +63,7 @@ namespace CarRentalSystem
             }
         }
 
-        static bool ExecuteCommand(CarRentalService service, CarFileWriter carWriter, RentalFileWriter rentalWriter, string cmd, string arg)
+        static bool ExecuteCommand(CarRentalService service, CarFileWriter carWriter, RentalFileWriter rentalWriter, CustomerFileWriter customerWriter, string cmd, string arg)
         {
             switch (cmd)
             {
@@ -82,11 +85,15 @@ namespace CarRentalSystem
                     break;
 
                 case "listrentals":
-                    ListRentals(service.GetAllRentals());
+                    ListRentals(service.GetAllRentals(), "All rentals:");
+                    break;
+
+                case "listcustomers":
+                    ListCustomers(service.GetAllCustomers(), "All customers:");
                     break;
 
                 case "listoverdue":
-                    ListRentals(service.GetOverdueRentals());
+                    ListRentals(service.GetOverdueRentals(), "Overdue rentals:");
                     break;
 
                 case "listmaintenance":
@@ -157,6 +164,7 @@ namespace CarRentalSystem
                 case "save":
                     carWriter.SaveCars(service.GetAllCars());
                     rentalWriter.SaveRentals(service.GetAllRentals());
+                    customerWriter.SaveCustomers(service.GetAllCustomers());
                     Console.WriteLine("Data saved to CSV files.");
                     break;
 
@@ -164,6 +172,7 @@ namespace CarRentalSystem
                 case "quit":
                     carWriter.SaveCars(service.GetAllCars());
                     rentalWriter.SaveRentals(service.GetAllRentals());
+                    customerWriter.SaveCustomers(service.GetAllCustomers());
                     Console.WriteLine("Data saved and exiting. Goodbye!");
                     return false;
 
@@ -183,6 +192,7 @@ Available commands:
   ListAvailable         – list only available cars
   ListRented            – list currently rented cars
   ListRentals           – list all rentals
+  ListCustomers         – list all customers
   ListOverdue           – list overdue rentals
   ListMaintenance       – list cars needing maintenance
   Add                   – add a new car
@@ -216,9 +226,9 @@ Available commands:
                 Console.WriteLine(c.GetDisplayInfo());
         }
 
-        static void ListRentals(IEnumerable<Rental> list)
+        static void ListRentals(IEnumerable<Rental> list, string header)
         {
-            Console.WriteLine("\nAll rentals:");
+            Console.WriteLine($"\n{header}");
             if (!list.Any())
             {
                 Console.WriteLine("No rentals found.");
@@ -227,6 +237,18 @@ Available commands:
             
             foreach (var r in list)
                 Console.WriteLine(r.GetDetails());
+        }
+
+        static void ListCustomers(IEnumerable<Customer> list, string header)
+        {
+            Console.WriteLine($"\n{header}");
+            if (!list.Any())
+            {
+                Console.WriteLine("No customers found.");
+                return;
+            }
+            foreach (var c in list)
+                Console.WriteLine(c.GetDisplayInfo());
         }
 
         static void AddCarInteractive(CarRentalService svc)
@@ -280,16 +302,16 @@ Available commands:
                     rate = 35.0m;
                 }
 
-                var car = new Car 
-                { 
-                    Id = id, 
-                    Make = make, 
-                    Model = model, 
-                    Year = year, 
-                    Type = type, 
+                var car = new Car
+                {
+                    Id = id,
+                    Make = make,
+                    Model = model,
+                    Year = year,
+                    Type = type,
                     LicensePlate = licensePlate,
                     DailyRate = rate,
-                    Status = "Available" 
+                    Status = CarStatus.Available
                 };
 
                 svc.AddCar(car);
@@ -395,7 +417,13 @@ Available commands:
 
             Console.Write($"Status ({car.Status}): ");
             tmp = Console.ReadLine()?.Trim();
-            if (!string.IsNullOrEmpty(tmp)) car.Status = tmp;
+            if (!string.IsNullOrEmpty(tmp))
+            {
+                if (Enum.TryParse<CarStatus>(tmp, true, out var status))
+                    car.Status = status;
+                else
+                    Console.WriteLine("Invalid status. Use: Available, Rented, Removed, Maintenance");
+            }
 
             Console.WriteLine("Car updated successfully.");
         }

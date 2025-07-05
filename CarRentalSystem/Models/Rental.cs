@@ -11,15 +11,55 @@ namespace CarRentalSystem.Models
     /// </summary>
     public class Rental
     {
+        /// <summary>
+        /// Gets or sets the unique identifier of the rental transaction
+        /// </summary>
         public int Id { get; set; }
+
+        /// <summary>
+        /// Gets or sets the ID of the car being rented
+        /// </summary>
         public int CarId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the optional customer ID reference
+        /// </summary>
+        public int? CustomerId { get; set; } // Optional reference to customer record
+
+        /// <summary>
+        /// Gets or sets the name of the customer renting the car
+        /// </summary>
         public string CustomerName { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Gets or sets the date when the rental started
+        /// </summary>
         public DateTime StartDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the expected return date for the rental
+        /// </summary>
         public DateTime ExpectedReturn { get; set; }
+
+        /// <summary>
+        /// Gets or sets the actual return date (null if not yet returned)
+        /// </summary>
         public DateTime? ActualReturn { get; set; }
+
+        /// <summary>
+        /// Gets or sets the daily rental rate in currency units
+        /// </summary>
         public decimal DailyRate { get; set; } = 35.0m;
+
+        /// <summary>
+        /// Gets or sets the total cost of the rental (calculated when completed)
+        /// </summary>
         public decimal? TotalCost { get; set; }
-        public string Status { get; set; } = "Active"; // Active, Completed, Overdue
+
+        /// <summary>
+        /// Gets or sets the current status of the rental transaction
+        /// </summary>
+        public RentalStatus Status { get; set; } = RentalStatus.Active;
 
         /// <summary>
         /// Calculates the total cost of the rental
@@ -38,7 +78,7 @@ namespace CarRentalSystem.Models
         /// <returns>True if rental is overdue</returns>
         public bool IsOverdue()
         {
-            return Status == "Active" && DateTime.Now > ExpectedReturn;
+            return Status == RentalStatus.Active && DateTime.Now > ExpectedReturn;
         }
 
         /// <summary>
@@ -48,7 +88,8 @@ namespace CarRentalSystem.Models
         public string GetDetails()
         {
             var cost = CalculateCost();
-            return $"Rental {Id}: Car {CarId} to {CustomerName}, " +
+            var customerInfo = CustomerId.HasValue ? $"Customer {CustomerId} ({CustomerName})" : CustomerName;
+            return $"Rental {Id}: Car {CarId} to {customerInfo}, " +
                    $"From {StartDate:yyyy-MM-dd} to {ExpectedReturn:yyyy-MM-dd}, " +
                    $"Status: {Status}, Cost: ${cost:F2}";
         }
@@ -60,7 +101,7 @@ namespace CarRentalSystem.Models
         public void Complete(DateTime actualReturnDate)
         {
             ActualReturn = actualReturnDate;
-            Status = "Completed";
+            Status = RentalStatus.Completed;
             TotalCost = CalculateCost();
         }
     }

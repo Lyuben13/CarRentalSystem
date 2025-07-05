@@ -1,0 +1,9 @@
+Id,Name,LicenseNumber,Email,Phone,RegistrationDate,IsActive
+101,Lyuben A.,CA123456,lyuben@email.com,+359888123456,2024-01-15,True
+102,Goshka Mitkova,CA789012,goshka@email.com,+359888789012,2024-02-20,True
+103,Gosho Velev,CA345678,gosho@email.com,+359888345678,2024-03-10,True
+104,Emiliya Emkova,CA901234,emiliya@email.com,+359888901234,2024-04-05,True
+105,Ivan Petrov,CA567890,ivan@email.com,+359888567890,2024-05-12,True
+106,Maria Georgieva,CA234567,maria@email.com,+359888234567,2024-06-18,True
+107,Stefan Dimitrov,CA678901,stefan@email.com,+359888678901,2024-07-25,True
+108,Elena Vasileva,CA012345,elena@email.com,+359888012345,2024-08-30,True

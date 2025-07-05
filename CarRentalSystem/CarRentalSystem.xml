@@ -1,0 +1,634 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CarRentalSystem</name>
+    </assembly>
+    <members>
+        <member name="T:CarRentalSystem.Interfaces.IFileOperations`1">
+            <summary>
+            Interface for file operations to support data persistence
+            </summary>
+            <typeparam name="T">Type of data to be stored</typeparam>
+        </member>
+        <member name="M:CarRentalSystem.Interfaces.IFileOperations`1.Load">
+            <summary>
+            Loads data from file
+            </summary>
+            <returns>List of loaded items</returns>
+        </member>
+        <member name="M:CarRentalSystem.Interfaces.IFileOperations`1.Save(System.Collections.Generic.List{`0})">
+            <summary>
+            Saves data to file
+            </summary>
+            <param name="items">Items to save</param>
+        </member>
+        <member name="T:CarRentalSystem.Interfaces.IRentable">
+            <summary>
+            Interface for objects that can be rented in the car rental system
+            </summary>
+        </member>
+        <member name="M:CarRentalSystem.Interfaces.IRentable.Rent(System.String)">
+            <summary>
+            Rents the item to a specified customer
+            </summary>
+            <param name="renter">Name of the person renting the item</param>
+        </member>
+        <member name="M:CarRentalSystem.Interfaces.IRentable.Return">
+            <summary>
+            Returns the item and makes it available for future rentals
+            </summary>
+        </member>
+        <member name="T:CarRentalSystem.Interfaces.ISearchable">
+            <summary>
+            Interface for objects that support search operations
+            </summary>
+        </member>
+        <member name="M:CarRentalSystem.Interfaces.ISearchable.GetCarById(System.Int32)">
+            <summary>
+            Gets a car by its unique identifier
+            </summary>
+            <param name="id">The unique identifier of the car</param>
+            <returns>The car with the specified ID, or null if not found</returns>
+        </member>
+        <member name="M:CarRentalSystem.Interfaces.ISearchable.SearchByModel(System.String)">
+            <summary>
+            Searches for cars by model name
+            </summary>
+            <param name="model">The model name to search for (case-insensitive)</param>
+            <returns>List of cars matching the model criteria</returns>
+        </member>
+        <member name="T:CarRentalSystem.Models.AbstractVehicle">
+            <summary>
+            Abstract base class for all vehicles in the rental system
+            </summary>
+        </member>
+        <member name="P:CarRentalSystem.Models.AbstractVehicle.Id">
+            <summary>
+            Gets or sets the unique identifier of the vehicle
+            </summary>
+        </member>
+        <member name="P:CarRentalSystem.Models.AbstractVehicle.Make">
+            <summary>
+            Gets or sets the manufacturer of the vehicle
+            </summary>
+        </member>
+        <member name="P:CarRentalSystem.Models.AbstractVehicle.Model">
+            <summary>
+            Gets or sets the model name of the vehicle
+            </summary>
+        </member>
+        <member name="P:CarRentalSystem.Models.AbstractVehicle.Year">
+            <summary>
+            Gets or sets the manufacturing year of the vehicle
+            </summary>
+        </member>
+        <member name="P:CarRentalSystem.Models.AbstractVehicle.Type">
+            <summary>
+            Gets or sets the type/category of the vehicle (e.g., Sedan, SUV, etc.)
+            </summary>
+        </member>
+        <member name="M:CarRentalSystem.Models.AbstractVehicle.GetDetails">
+            <summary>
+            Gets detailed information about the vehicle as a formatted string
+            </summary>
+            <returns>A string containing all vehicle details in a structured format</returns>
+        </member>
+        <member name="T:CarRentalSystem.Models.Car">
+            <summary>
+            Represents a car in the rental system
+            </summary>
+        </member>
+        <member name="P:CarRentalSystem.Models.Car.Status">
+            <summary>
+            Gets or sets the current status of the car (Available, Rented, Removed, Maintenance)
+            </summary>
+        </member>
+        <member name="P:CarRentalSystem.Models.Car.CurrentRenter">
+            <summary>
+            Gets or sets the name of the person currently renting the car
+            </summary>
+        </member>
+        <member name="P:CarRentalSystem.Models.Car.DailyRate">
+            <summary>
+            Gets or sets the daily rental rate for this car in currency units
+            </summary>
+        </member>
+        <member name="P:CarRentalSystem.Models.Car.LicensePlate">
+            <summary>
+            Gets or sets the license plate number of the car
+            </summary>
+        </member>
+        <member name="P:CarRentalSystem.Models.Car.Mileage">
+            <summary>
+            Gets or sets the current mileage of the car in kilometers
+            </summary>
+        </member>
+        <member name="P:CarRentalSystem.Models.Car.LastMaintenance">
+            <summary>
+            Gets or sets the date when the car last underwent maintenance
+            </summary>
+        </member>
+        <member name="M:CarRentalSystem.Models.Car.Rent(System.String)">
+            <summary>
+            Rents the car to a customer
+            </summary>
+            <param name="renter">Name of the renter</param>
+        </member>
+        <member name="M:CarRentalSystem.Models.Car.Return">
+            <summary>
+            Returns the car and makes it available again
+            </summary>
+        </member>
+        <member name="M:CarRentalSystem.Models.Car.NeedsMaintenance">
+            <summary>
+            Checks if the car needs maintenance
+            </summary>
+            <returns>True if maintenance is needed</returns>
+        </member>
+        <member name="M:CarRentalSystem.Models.Car.IsValid">
+            <summary>
+            Validates car data
+            </summary>
+            <returns>True if car data is valid</returns>
+        </member>
+        <member name="M:CarRentalSystem.Models.Car.GetDetails">
+            <summary>
+            Gets detailed information about the car
+            </summary>
+            <returns>Formatted car details</returns>
+        </member>
+        <member name="M:CarRentalSystem.Models.Car.GetDisplayInfo">
+            <summary>
+            Gets a user-friendly display string
+            </summary>
+            <returns>Formatted display string</returns>
+        </member>
+        <member name="T:CarRentalSystem.Models.CarStatus">
+            <summary>
+            Represents the status of a car in the rental system
+            </summary>
+        </member>
+        <member name="F:CarRentalSystem.Models.CarStatus.Available">
+            <summary>
+            Car is available for rental
+            </summary>
+        </member>
+        <member name="F:CarRentalSystem.Models.CarStatus.Rented">
+            <summary>
+            Car is currently rented to a customer
+            </summary>
+        </member>
+        <member name="F:CarRentalSystem.Models.CarStatus.Removed">
+            <summary>
+            Car has been removed from the fleet (sold, scrapped, etc.)
+            </summary>
+        </member>
+        <member name="F:CarRentalSystem.Models.CarStatus.Maintenance">
+            <summary>
+            Car is undergoing maintenance or repairs
+            </summary>
+        </member>
+        <member name="T:CarRentalSystem.Models.Customer">
+            <summary>
+            Represents a customer in the car rental system
+            </summary>
+        </member>
+        <member name="P:CarRentalSystem.Models.Customer.Id">
+            <summary>
+            Gets or sets the unique identifier of the customer
+            </summary>
+        </member>
+        <member name="P:CarRentalSystem.Models.Customer.Name">
+            <summary>
+            Gets or sets the full name of the customer
+            </summary>
+        </member>
+        <member name="P:CarRentalSystem.Models.Customer.LicenseNumber">
+            <summary>
+            Gets or sets the customer's driver's license number
+            </summary>
+        </member>
+        <member name="P:CarRentalSystem.Models.Customer.Email">
+            <summary>
+            Gets or sets the customer's email address
+            </summary>
+        </member>
+        <member name="P:CarRentalSystem.Models.Customer.Phone">
+            <summary>
+            Gets or sets the customer's phone number
+            </summary>
+        </member>
+        <member name="P:CarRentalSystem.Models.Customer.RegistrationDate">
+            <summary>
+            Gets or sets the date when the customer was registered in the system
+            </summary>
+        </member>
+        <member name="P:CarRentalSystem.Models.Customer.IsActive">
+            <summary>
+            Gets or sets whether the customer account is currently active
+            </summary>
+        </member>
+        <member name="M:CarRentalSystem.Models.Customer.GetDetails">
+            <summary>
+            Gets customer details as a formatted string
+            </summary>
+            <returns>Formatted customer information</returns>
+        </member>
+        <member name="M:CarRentalSystem.Models.Customer.GetDisplayInfo">
+            <summary>
+            Gets a user-friendly display string for the customer
+            </summary>
+            <returns>Formatted display string</returns>
+        </member>
+        <member name="M:CarRentalSystem.Models.Customer.IsValid">
+            <summary>
+            Validates customer data
+            </summary>
+            <returns>True if customer data is valid</returns>
+        </member>
+        <member name="T:CarRentalSystem.Models.Rental">
+            <summary>
+            Represents a car rental transaction
+            </summary>
+        </member>
+        <member name="P:CarRentalSystem.Models.Rental.Id">
+            <summary>
+            Gets or sets the unique identifier of the rental transaction
+            </summary>
+        </member>
+        <member name="P:CarRentalSystem.Models.Rental.CarId">
+            <summary>
+            Gets or sets the ID of the car being rented
+            </summary>
+        </member>
+        <member name="P:CarRentalSystem.Models.Rental.CustomerId">
+            <summary>
+            Gets or sets the optional customer ID reference
+            </summary>
+        </member>
+        <member name="P:CarRentalSystem.Models.Rental.CustomerName">
+            <summary>
+            Gets or sets the name of the customer renting the car
+            </summary>
+        </member>
+        <member name="P:CarRentalSystem.Models.Rental.StartDate">
+            <summary>
+            Gets or sets the date when the rental started
+            </summary>
+        </member>
+        <member name="P:CarRentalSystem.Models.Rental.ExpectedReturn">
+            <summary>
+            Gets or sets the expected return date for the rental
+            </summary>
+        </member>
+        <member name="P:CarRentalSystem.Models.Rental.ActualReturn">
+            <summary>
+            Gets or sets the actual return date (null if not yet returned)
+            </summary>
+        </member>
+        <member name="P:CarRentalSystem.Models.Rental.DailyRate">
+            <summary>
+            Gets or sets the daily rental rate in currency units
+            </summary>
+        </member>
+        <member name="P:CarRentalSystem.Models.Rental.TotalCost">
+            <summary>
+            Gets or sets the total cost of the rental (calculated when completed)
+            </summary>
+        </member>
+        <member name="P:CarRentalSystem.Models.Rental.Status">
+            <summary>
+            Gets or sets the current status of the rental transaction
+            </summary>
+        </member>
+        <member name="M:CarRentalSystem.Models.Rental.CalculateCost">
+            <summary>
+            Calculates the total cost of the rental
+            </summary>
+            <returns>Total cost in decimal</returns>
+        </member>
+        <member name="M:CarRentalSystem.Models.Rental.IsOverdue">
+            <summary>
+            Checks if the rental is overdue
+            </summary>
+            <returns>True if rental is overdue</returns>
+        </member>
+        <member name="M:CarRentalSystem.Models.Rental.GetDetails">
+            <summary>
+            Gets rental details as a formatted string
+            </summary>
+            <returns>Formatted rental information</returns>
+        </member>
+        <member name="M:CarRentalSystem.Models.Rental.Complete(System.DateTime)">
+            <summary>
+            Completes the rental and calculates final cost
+            </summary>
+            <param name="actualReturnDate">Actual return date</param>
+        </member>
+        <member name="T:CarRentalSystem.Models.RentalStatus">
+            <summary>
+            Represents the status of a rental transaction
+            </summary>
+        </member>
+        <member name="F:CarRentalSystem.Models.RentalStatus.Active">
+            <summary>
+            Rental is currently active and ongoing
+            </summary>
+        </member>
+        <member name="F:CarRentalSystem.Models.RentalStatus.Completed">
+            <summary>
+            Rental has been completed and car returned
+            </summary>
+        </member>
+        <member name="F:CarRentalSystem.Models.RentalStatus.Overdue">
+            <summary>
+            Rental is overdue (past expected return date)
+            </summary>
+        </member>
+        <member name="T:CarRentalSystem.Services.CarFileReader">
+            <summary>
+            Reads car records from cars.csv file
+            </summary>
+        </member>
+        <member name="M:CarRentalSystem.Services.CarFileReader.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the CarFileReader with the specified file path
+            </summary>
+            <param name="path">The path to the CSV file containing car data</param>
+        </member>
+        <member name="M:CarRentalSystem.Services.CarFileReader.LoadCars">
+            <summary>
+            Loads all cars from CSV file
+            </summary>
+            <returns>List of car records</returns>
+        </member>
+        <member name="T:CarRentalSystem.Services.CarFileWriter">
+            <summary>
+            Writes car list to cars.csv file
+            </summary>
+        </member>
+        <member name="M:CarRentalSystem.Services.CarFileWriter.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the CarFileWriter with the specified file path
+            </summary>
+            <param name="path">The path to the CSV file where car data will be saved</param>
+        </member>
+        <member name="M:CarRentalSystem.Services.CarFileWriter.SaveCars(System.Collections.Generic.List{CarRentalSystem.Models.Car})">
+            <summary>
+            Saves car list to CSV file
+            </summary>
+            <param name="cars">List of cars to save</param>
+        </member>
+        <member name="T:CarRentalSystem.Services.CarRentalService">
+            <summary>
+            Main service class containing business logic for car rental management
+            </summary>
+        </member>
+        <member name="M:CarRentalSystem.Services.CarRentalService.#ctor">
+            <summary>
+            Creates a service instance with empty lists
+            </summary>
+        </member>
+        <member name="M:CarRentalSystem.Services.CarRentalService.#ctor(System.Collections.Generic.List{CarRentalSystem.Models.Car})">
+            <summary>
+            Creates a service instance with initial cars
+            </summary>
+            <param name="initialCars">Initial list of cars</param>
+        </member>
+        <member name="M:CarRentalSystem.Services.CarRentalService.#ctor(System.Collections.Generic.List{CarRentalSystem.Models.Car},System.Collections.Generic.List{CarRentalSystem.Models.Rental})">
+            <summary>
+            Creates a service instance with provided cars and rentals
+            </summary>
+            <param name="initialCars">Initial list of cars</param>
+            <param name="initialRentals">Initial list of rentals</param>
+        </member>
+        <member name="M:CarRentalSystem.Services.CarRentalService.#ctor(System.Collections.Generic.List{CarRentalSystem.Models.Car},System.Collections.Generic.List{CarRentalSystem.Models.Rental},System.Collections.Generic.List{CarRentalSystem.Models.Customer})">
+            <summary>
+            Creates a service instance with provided cars, rentals, and customers
+            </summary>
+            <param name="initialCars">Initial list of cars</param>
+            <param name="initialRentals">Initial list of rentals</param>
+            <param name="initialCustomers">Initial list of customers</param>
+        </member>
+        <member name="M:CarRentalSystem.Services.CarRentalService.GetCarById(System.Int32)">
+            <summary>
+            Gets a car by its unique identifier
+            </summary>
+            <param name="id">The unique identifier of the car</param>
+            <returns>The car with the specified ID, or null if not found</returns>
+        </member>
+        <member name="M:CarRentalSystem.Services.CarRentalService.SearchByModel(System.String)">
+            <summary>
+            Searches for cars by model name (case-insensitive)
+            </summary>
+            <param name="model">The model name to search for</param>
+            <returns>List of cars matching the model criteria</returns>
+        </member>
+        <member name="M:CarRentalSystem.Services.CarRentalService.SearchByStatus(System.String)">
+            <summary>
+            Searches for cars by status (case-insensitive)
+            </summary>
+            <param name="status">The status to search for</param>
+            <returns>List of cars with the specified status</returns>
+        </member>
+        <member name="M:CarRentalSystem.Services.CarRentalService.GetAllCars">
+            <summary>
+            Gets all cars in the system
+            </summary>
+            <returns>List of all cars</returns>
+        </member>
+        <member name="M:CarRentalSystem.Services.CarRentalService.AddCar(CarRentalSystem.Models.Car)">
+            <summary>
+            Adds a new car to the system
+            </summary>
+            <param name="car">The car to add</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when car is null</exception>
+            <exception cref="T:System.ArgumentException">Thrown when car data is invalid</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when car with same ID already exists</exception>
+        </member>
+        <member name="M:CarRentalSystem.Services.CarRentalService.RemoveCar(System.Int32)">
+            <summary>
+            Marks a car as removed from the fleet
+            </summary>
+            <param name="id">The ID of the car to remove</param>
+            <exception cref="T:System.ArgumentException">Thrown when car with specified ID is not found</exception>
+        </member>
+        <member name="M:CarRentalSystem.Services.CarRentalService.RentCar(System.Int32,System.String)">
+            <summary>
+            Rents a car to a customer
+            </summary>
+            <param name="id">The ID of the car to rent</param>
+            <param name="renter">The name of the person renting the car</param>
+            <exception cref="T:System.InvalidOperationException">Thrown when car is not available for rent</exception>
+        </member>
+        <member name="M:CarRentalSystem.Services.CarRentalService.ReturnCar(System.Int32)">
+            <summary>
+            Returns a rented car and completes the rental transaction
+            </summary>
+            <param name="id">The ID of the car to return</param>
+            <exception cref="T:System.InvalidOperationException">Thrown when car is not currently rented or no active rental exists</exception>
+        </member>
+        <member name="M:CarRentalSystem.Services.CarRentalService.ListAvailable">
+            <summary>
+            Gets all available cars
+            </summary>
+            <returns>List of available cars</returns>
+        </member>
+        <member name="M:CarRentalSystem.Services.CarRentalService.ListRented">
+            <summary>
+            Gets all currently rented cars
+            </summary>
+            <returns>List of rented cars</returns>
+        </member>
+        <member name="M:CarRentalSystem.Services.CarRentalService.ListNeedingMaintenance">
+            <summary>
+            Gets all cars that need maintenance
+            </summary>
+            <returns>List of cars needing maintenance</returns>
+        </member>
+        <member name="M:CarRentalSystem.Services.CarRentalService.GetAllRentals">
+            <summary>
+            Gets all rental transactions
+            </summary>
+            <returns>List of all rentals</returns>
+        </member>
+        <member name="M:CarRentalSystem.Services.CarRentalService.AddRental(CarRentalSystem.Models.Rental)">
+            <summary>
+            Adds a new rental transaction
+            </summary>
+            <param name="rental">The rental to add</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when rental is null</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when rental with same ID already exists or car is not available</exception>
+            <exception cref="T:System.ArgumentException">Thrown when car with specified ID is not found</exception>
+        </member>
+        <member name="M:CarRentalSystem.Services.CarRentalService.CompleteRental(System.Int32,System.DateTime)">
+            <summary>
+            Completes a rental transaction
+            </summary>
+            <param name="carId">The ID of the car</param>
+            <param name="actualReturn">The actual return date</param>
+            <exception cref="T:System.ArgumentException">Thrown when no active rental is found for the car</exception>
+        </member>
+        <member name="M:CarRentalSystem.Services.CarRentalService.GetOverdueRentals">
+            <summary>
+            Gets all overdue rental transactions
+            </summary>
+            <returns>List of overdue rentals</returns>
+        </member>
+        <member name="M:CarRentalSystem.Services.CarRentalService.GetTotalRevenue">
+            <summary>
+            Calculates the total revenue from completed rentals
+            </summary>
+            <returns>Total revenue amount</returns>
+        </member>
+        <member name="M:CarRentalSystem.Services.CarRentalService.GetAllCustomers">
+            <summary>
+            Gets all customers in the system
+            </summary>
+            <returns>List of all customers</returns>
+        </member>
+        <member name="M:CarRentalSystem.Services.CarRentalService.AddCustomer(CarRentalSystem.Models.Customer)">
+            <summary>
+            Adds a new customer to the system
+            </summary>
+            <param name="customer">The customer to add</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when customer is null</exception>
+            <exception cref="T:System.ArgumentException">Thrown when customer data is invalid</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when customer with same ID already exists</exception>
+        </member>
+        <member name="M:CarRentalSystem.Services.CarRentalService.GetCustomerById(System.Int32)">
+            <summary>
+            Gets a customer by their unique identifier
+            </summary>
+            <param name="id">The unique identifier of the customer</param>
+            <returns>The customer with the specified ID, or null if not found</returns>
+        </member>
+        <member name="M:CarRentalSystem.Services.CarRentalService.GetCarsByType">
+            <summary>
+            Gets statistics of cars grouped by type
+            </summary>
+            <returns>Dictionary with car type as key and count as value</returns>
+        </member>
+        <member name="M:CarRentalSystem.Services.CarRentalService.GetRevenueByMonth">
+            <summary>
+            Gets revenue statistics grouped by month
+            </summary>
+            <returns>Dictionary with month (yyyy-MM) as key and revenue as value</returns>
+        </member>
+        <member name="T:CarRentalSystem.Services.CustomerFileReader">
+            <summary>
+            Reads customer records from customers.csv file
+            </summary>
+        </member>
+        <member name="M:CarRentalSystem.Services.CustomerFileReader.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the CustomerFileReader with the specified file path
+            </summary>
+            <param name="path">The path to the CSV file containing customer data</param>
+        </member>
+        <member name="M:CarRentalSystem.Services.CustomerFileReader.LoadCustomers">
+            <summary>
+            Loads all customers from CSV file
+            </summary>
+            <returns>List of customer records</returns>
+        </member>
+        <member name="T:CarRentalSystem.Services.CustomerFileWriter">
+            <summary>
+            Writes customer list to customers.csv file
+            </summary>
+        </member>
+        <member name="M:CarRentalSystem.Services.CustomerFileWriter.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the CustomerFileWriter with the specified file path
+            </summary>
+            <param name="path">The path to the CSV file where customer data will be saved</param>
+        </member>
+        <member name="M:CarRentalSystem.Services.CustomerFileWriter.SaveCustomers(System.Collections.Generic.List{CarRentalSystem.Models.Customer})">
+            <summary>
+            Saves customer list to CSV file
+            </summary>
+            <param name="customers">List of customers to save</param>
+        </member>
+        <member name="T:CarRentalSystem.Services.RentalFileReader">
+            <summary>
+            Reads rental records from rentals.csv file
+            </summary>
+        </member>
+        <member name="M:CarRentalSystem.Services.RentalFileReader.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the RentalFileReader with the specified file path
+            </summary>
+            <param name="path">The path to the CSV file containing rental data</param>
+        </member>
+        <member name="M:CarRentalSystem.Services.RentalFileReader.LoadRentals">
+            <summary>
+            Loads all rentals from CSV file
+            </summary>
+            <returns>List of rental records</returns>
+        </member>
+        <member name="M:CarRentalSystem.Services.RentalFileReader.ParseRentalStatus(System.String)">
+            <summary>
+            Parses rental status from string to enum
+            </summary>
+            <param name="statusString">Status as string</param>
+            <returns>RentalStatus enum value</returns>
+        </member>
+        <member name="T:CarRentalSystem.Services.RentalFileWriter">
+            <summary>
+            Writes rental list to rentals.csv file
+            </summary>
+        </member>
+        <member name="M:CarRentalSystem.Services.RentalFileWriter.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the RentalFileWriter with the specified file path
+            </summary>
+            <param name="path">The path to the CSV file where rental data will be saved</param>
+        </member>
+        <member name="M:CarRentalSystem.Services.RentalFileWriter.SaveRentals(System.Collections.Generic.List{CarRentalSystem.Models.Rental})">
+            <summary>
+            Saves rental list to CSV file
+            </summary>
+            <param name="rentals">List of rentals to save</param>
+        </member>
+    </members>
+</doc>

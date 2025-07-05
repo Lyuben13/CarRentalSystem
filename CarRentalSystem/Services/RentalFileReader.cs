@@ -13,6 +13,10 @@ namespace CarRentalSystem.Services
     {
         private readonly string filePath;
         
+        /// <summary>
+        /// Initializes a new instance of the RentalFileReader with the specified file path
+        /// </summary>
+        /// <param name="path">The path to the CSV file containing rental data</param>
         public RentalFileReader(string path) => filePath = path;
 
         /// <summary>
@@ -38,13 +42,14 @@ namespace CarRentalSystem.Services
                     {
                         Id = int.Parse(parts[0]),
                         CarId = int.Parse(parts[1]),
+                        CustomerId = null, // Not in current CSV format
                         CustomerName = parts[2],
                         StartDate = DateTime.Parse(parts[3]),
                         ExpectedReturn = DateTime.Parse(parts[4]),
-                        ActualReturn = string.IsNullOrEmpty(parts[5]) ? (DateTime?)null : DateTime.Parse(parts[5]),
+                        ActualReturn = parts.Length > 5 && !string.IsNullOrEmpty(parts[5]) ? DateTime.Parse(parts[5]) : null,
                         DailyRate = parts.Length > 6 ? decimal.Parse(parts[6], CultureInfo.InvariantCulture) : 35.0m,
                         TotalCost = parts.Length > 7 && !string.IsNullOrEmpty(parts[7]) ? decimal.Parse(parts[7], CultureInfo.InvariantCulture) : null,
-                        Status = parts.Length > 8 ? parts[8] : "Active"
+                        Status = ParseRentalStatus(parts.Length > 8 ? parts[8] : "Active")
                     };
                     list.Add(rental);
                 }
@@ -54,6 +59,26 @@ namespace CarRentalSystem.Services
                 }
             }
             return list;
+        }
+
+        /// <summary>
+        /// Parses rental status from string to enum
+        /// </summary>
+        /// <param name="statusString">Status as string</param>
+        /// <returns>RentalStatus enum value</returns>
+        private RentalStatus ParseRentalStatus(string statusString)
+        {
+            if (Enum.TryParse<RentalStatus>(statusString, true, out var status))
+                return status;
+            
+            // Fallback for old string values
+            return statusString?.ToLower() switch
+            {
+                "active" => RentalStatus.Active,
+                "completed" => RentalStatus.Completed,
+                "overdue" => RentalStatus.Overdue,
+                _ => RentalStatus.Active
+            };
         }
     }
 }

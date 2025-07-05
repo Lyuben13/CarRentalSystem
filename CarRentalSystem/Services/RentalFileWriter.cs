@@ -11,6 +11,10 @@ namespace CarRentalSystem.Services
     {
         private readonly string filePath;
         
+        /// <summary>
+        /// Initializes a new instance of the RentalFileWriter with the specified file path
+        /// </summary>
+        /// <param name="path">The path to the CSV file where rental data will be saved</param>
         public RentalFileWriter(string path) => filePath = path;
 
         /// <summary>
