@@ -1,0 +1,5 @@
+Id,CarId,CustomerName,StartDate,ExpectedReturn,ActualReturn,DailyRate,TotalCost,Status
+1001,3,Goshka Mitkova,2025-01-10,2025-01-15,,20.0,,Active
+1002,5,Gosho Velev,2025-01-12,2025-01-18,,60.0,,Active
+1003,10,Emiliya Emkova,2025-01-14,2025-01-20,,22.0,,Active
+1004,1,Lyuben A.,2025-07-05,2025-07-12,,45.0,,Active

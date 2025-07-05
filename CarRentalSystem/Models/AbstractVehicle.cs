@@ -9,12 +9,11 @@ namespace CarRentalSystem.Models
     public abstract class AbstractVehicle
     {
         public int Id { get; set; }
-        public string Make { get; set; }
-        public string Model { get; set; }
+        public string Make { get; set; } = string.Empty;
+        public string Model { get; set; } = string.Empty;
         public int Year { get; set; }
-        public string Type { get; set; }
+        public string Type { get; set; } = string.Empty;
 
         public abstract string GetDetails();
     }
-
 }

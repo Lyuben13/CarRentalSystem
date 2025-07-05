@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Globalization;
 using CarRentalSystem.Models;
 
 namespace CarRentalSystem.Services
 {
+    /// <summary>
+    /// Reads car records from cars.csv file
+    /// </summary>
     public class CarFileReader
     {
         private string filePath;
@@ -14,6 +18,10 @@ namespace CarRentalSystem.Services
             filePath = path;
         }
 
+        /// <summary>
+        /// Loads all cars from CSV file
+        /// </summary>
+        /// <returns>List of car records</returns>
         public List<Car> LoadCars()
         {
             var cars = new List<Car>();
@@ -35,14 +43,16 @@ namespace CarRentalSystem.Services
                         Year = int.Parse(parts[3]),
                         Type = parts[4],
                         Status = parts[5],
-                        CurrentRenter = parts.Length > 6 ? parts[6] : ""
+                        CurrentRenter = parts.Length > 6 ? parts[6] : "",
+                        LicensePlate = parts.Length > 7 ? parts[7] : "",
+                        Mileage = parts.Length > 8 ? int.Parse(parts[8]) : 0,
+                        DailyRate = parts.Length > 9 ? decimal.Parse(parts[9], CultureInfo.InvariantCulture) : 35.0m
                     };
                     cars.Add(car);
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Error reading line: " + lines[i]);
-                    Console.WriteLine(ex.Message);
+                    Console.WriteLine($"Error reading car line {i + 1}: {ex.Message}");
                 }
             }
 

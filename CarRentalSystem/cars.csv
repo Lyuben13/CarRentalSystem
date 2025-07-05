@@ -1,11 +1,11 @@
-Id,Make,Model,Year,Type,Status,CurrentRenter
-1,VW,Passat,2020,Sedan,Available,
-2,Toyota,Corolla,2019,Sedan,Available,
-3,Ford,Focus,2021,Hatchback,Rented,Jane Smith
-4,Audi,A4,2022,Sedan,Available,
-5,BMW,3 Series,2018,Sedan,Rented,John Doe
-6,Mercedes,C-Class,2023,Coupe,Available,
-7,Hyundai,Tucson,2020,SUV,Available,
-8,Chevrolet,Impala,2017,Sedan,Removed,
-9,Kia,Optima,2019,Sedan,Available,
-10,Nissan,Leaf,2021,Hatchback,Rented,Emily Davis
+Id,Make,Model,Year,Type,Status,CurrentRenter,LicensePlate,Mileage,DailyRate
+1,VW,Passat,2020,Sedan,Available,,CA1234,45000,45.00
+2,Toyota,Corolla,2019,Sedan,Available,,CA5678,38000,40.00
+3,Ford,Focus,2021,Hatchback,Rented,Jane Smith,CA9012,52000,20.00
+4,Audi,A4,2022,Sedan,Available,,CA3456,25000,55.00
+5,BMW,3 Series,2018,Sedan,Rented,John Doe,CA7890,65000,60.00
+6,Mercedes,C-Class,2023,Coupe,Rented,Emily Davis,CA1111,15000,65.00
+7,Hyundai,Tucson,2020,SUV,Available,,CA2222,42000,120.00
+8,Chevrolet,Impala,2017,Sedan,Removed,,CA3333,85000,18.00
+9,Kia,Optima,2019,Sedan,Available,,CA4444,48000,35.00
+10,Nissan,Leaf,2021,Hatchback,Rented,Emily Davis,CA5555,32000,22.00
